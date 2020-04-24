@@ -1,0 +1,51 @@
+<style>
+  button {
+    width: 100%;
+    display: block;
+  }
+
+  textarea {
+    width: 100%;
+    display: block;
+    margin: 0.5em 0;
+  }
+</style>
+
+<b>Paste into figma.js</b>
+<textarea id="figma_output"></textarea>
+<button id="copy_figma">
+  Copy figma.js
+</button>
+<hr />
+<b>Paste into manifest.js</b>
+<textarea id="manifest_output"></textarea>
+<button id="copy_manifest">Copy manifest.js</button>
+
+<script>
+  function copy(targetId) {
+    document.getElementById(targetId).select();
+    document.execCommand("copy");
+  }
+
+  window.onmessage = async event => {
+    if (!event.data.pluginMessage) return;
+    const { exportableBytes, manifest } = event.data.pluginMessage;
+
+    document.getElementById(
+      "figma_output"
+    ).value = `export default = ${JSON.stringify(exportableBytes)}`;
+    document.getElementById("copy_figma")
+      .addEventListener("click", function() {
+        document.getElementById("figma_output").select();
+        document.execCommand("copy");
+      });
+
+    document.getElementById(
+      "manifest_output").value = `export default = ${JSON.stringify(manifest)}`;
+    document.getElementById("copy_manifest")
+      .addEventListener("click", function() {
+        document.getElementById("manifest_output").select();
+        document.execCommand("copy");
+      });
+  };
+</script>
