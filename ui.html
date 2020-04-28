@@ -11,29 +11,64 @@
   }
 </style>
 
-<b>Paste into figma.js</b>
+
 <textarea id="figma_output"></textarea>
-<button id="copy_figma">
-  Copy figma.js
-</button>
+<button id="download_figma">Download figma.js</button>
+<button id="copy_figma">Copy</button>
 <hr />
-<b>Paste into manifest.js</b>
+
 <textarea id="manifest_output"></textarea>
-<button id="copy_manifest">Copy manifest.js</button>
+<button id="download_manifest">Download manifest.js</button>
+<button id="copy_manifest">Copy</button>
 
 <script>
+  function downloadFile(text, filename) {
+    let file = new Blob([text], {type: "text/plain"})
+    let a = document.createElement("a");
+    let url = URL.createObjectURL(file);
+
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(function() {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+
   function copy(targetId) {
     document.getElementById(targetId).select();
     document.execCommand("copy");
   }
 
+
   window.onmessage = async event => {
     if (!event.data.pluginMessage) return;
     const { exportableBytes, manifest } = event.data.pluginMessage;
 
+    const figmaText = `export default = ${JSON.stringify(exportableBytes)}`;
+    const manifestText = `export default = ${JSON.stringify(manifest)}`;
+
+
+    // Download buttons
+    document.getElementById("download_figma").addEventListener(
+      "click", function() {
+        downloadFile(figmaText, "figma.js");
+      }
+    );
+
+    document.getElementById("download_manifest").addEventListener(
+      "click", function() {
+        downloadFile(manifestText, "manifest.js");
+      }
+    );
+
+    // Copy buttons
     document.getElementById(
       "figma_output"
-    ).value = `export default = ${JSON.stringify(exportableBytes)}`;
+    ).value = figmaText;
     document.getElementById("copy_figma")
       .addEventListener("click", function() {
         document.getElementById("figma_output").select();
@@ -41,7 +76,7 @@
       });
 
     document.getElementById(
-      "manifest_output").value = `export default = ${JSON.stringify(manifest)}`;
+      "manifest_output").value = manifestText;
     document.getElementById("copy_manifest")
       .addEventListener("click", function() {
         document.getElementById("manifest_output").select();
