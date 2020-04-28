@@ -1,25 +1,52 @@
+<link
+  rel="stylesheet"
+  href="https://thomas-lowry.github.io/figma-plugin-ds/css/figma-plugin-ds.min.css"
+/>
+
 <style>
-  button {
-    width: 100%;
-    display: block;
+  body {
+    margin: 0;
   }
 
-  textarea {
-    width: 100%;
-    display: block;
-    margin: 0.5em 0;
+  .textarea {
+    font-family: monospace;
+  }
+
+  .section {
+    margin: 8px 0;
+  }
+
+  .section + .section {
+    margin-top: 16px;
+  }
+
+  .buttons {
+    padding: 8px 8px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .button--primary {
+    flex: 1 1 auto;
+    margin-left: 8px;
   }
 </style>
 
+<div class="section">
+  <textarea id="figma_output" class="textarea" rows="1"></textarea>
+  <div class="buttons">
+    <button id="copy_figma" class="button button--secondary">Copy</button>
+    <button id="download_figma" class="button button--primary">Download figma.js</button>
+  </div>
+</div>
+<div class="section">
+  <textarea id="manifest_output" class="textarea" rows="1"></textarea>
+  <div class="buttons">
+    <button id="copy_manifest" class="button button--secondary">Copy</button>
+    <button id="download_manifest" class="button button--primary">Download manifest.js</button>
+  </div>
+</div>
 
-<textarea id="figma_output"></textarea>
-<button id="download_figma">Download figma.js</button>
-<button id="copy_figma">Copy</button>
-<hr />
-
-<textarea id="manifest_output"></textarea>
-<button id="download_manifest">Download manifest.js</button>
-<button id="copy_manifest">Copy</button>
 
 <script>
   function downloadFile(text, filename) {

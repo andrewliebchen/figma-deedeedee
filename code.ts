@@ -61,7 +61,10 @@ async function main(nodes): Promise<string> {
     }
   }
 
-  figma.showUI(__html__, { visible: true });
+  figma.showUI(__html__, {
+    visible: true,
+    height: 238
+  });
   figma.ui.postMessage({ exportableBytes, manifest  });
 
   return new Promise(res => {
